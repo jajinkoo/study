@@ -249,6 +249,8 @@ namespace study
             for (int i2 = 0; i2 < indexer.Length; i2++)
             {
                 string temp = string.Format("size{0}", indexer[i2]);
+
+
             }
 
             //static 메서드 
