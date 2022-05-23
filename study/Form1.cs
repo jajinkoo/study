@@ -8,6 +8,11 @@ using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Forms;
 using System.Collections;
+using System.IO;
+
+
+
+
 
 namespace study
 {
@@ -16,7 +21,9 @@ namespace study
     public partial class Form1 : Form
     {
 
-       
+        double d_sum = 0;
+        DateTime _time;
+        bool? _Selected;
 
         public Form1()
         {
@@ -170,7 +177,289 @@ namespace study
             SqlConnection conn = null; 
             */
 
+            int kk = 0;
+            double jj = 0;
+            DateTime dt = new DateTime();
+            bool? b = true;
 
+            CheckInput(kk, jj, dt, b);
+
+            //레퍼런스 
+            int test1 = 0;
+            int test2 = 1;
+
+            int test3 = testRefFunc(ref test1, ref test2);
+
+            //param
+            int s = testparam(1, 2, 3, 4);
+            int t = testparam(1, 2, 3, 4, 5, 6, 7);
+
+            
+        }
+        public int testparam(params int[] values)
+        {
+            int sum = 0; 
+            foreach(int a in values)
+            {
+                sum += a;
+            }
+            return sum; 
+        }
+
+        public int testRefFunc(ref int a, ref int b)
+        {
+            return a + b;
+        }
+        public void CheckInput( int? i, double? d, DateTime? time, bool? selected)
+        {
+
+            if (i.HasValue && d.HasValue)
+                d_sum = (double)i.Value + (double)d.Value;
+
+            if (!time.HasValue)
+                throw new ArgumentException();
+            else
+                _time= time.Value;
+
+            selected = selected ?? false;
+
+        }
+        void NullableTest()
+        {
+            int? a = null;
+            int? b = 0;
+            int result = Nullable.Compare<int>(a, b);
+
+            double? c = 0.01;
+            double? d = 0.0001;
+            bool result2 = Nullable.Equals<double>(c, d);
+
+        }
+
+        private void button3_Click(object sender, EventArgs e)
+        {
+            //indexxer
+            MyIndexer indexer = new MyIndexer();
+
+            for(int i1 = 0; i1< 10; i1++)
+            {
+                indexer[i1] = i1; 
+            }
+
+            for (int i2 = 0; i2 < indexer.Length; i2++)
+            {
+                string temp = string.Format("size{0}", indexer[i2]);
+            }
+
+            //static 메서드 
+            MyClass myClass = new MyClass();
+            int i3 = myClass.InstRun();
+
+            int j = MyClass.Run();
+
+            /// static class
+            string str = MyUtility.Convert(123);
+            int i5 = MyUtility.ConvertBack(str);
+
+            //as is
+
+            MyClass1 c = new MyClass1();
+            new Form1().Test(c);
+
+            //제너렉 
+            MyStack<int> numberStack = new MyStack<int>();
+            MyStack<string> nameStack = new MyStack<string>();
+
+            List<string> nameList = new List<string>();
+            nameList.Add("1");
+
+            Dictionary<string, int> dic = new Dictionary<string, int>();
+            dic["1"] = 100; 
+
+        }
+
+        public void Test(object obj)
+        {
+            MyBase a = obj as MyBase;
+
+            bool ok = obj is MyBase;
+
+            MyBase b = (MyBase)obj;
+        }
+
+        private void button4_Click(object sender, EventArgs e)
+        {
+            climateMonitor monitor = new climateMonitor(new FileLogger("Mylog.txt"));
+
+            monitor.start();
+        }
+    }
+
+
+    interface ILoger
+    {
+        void WriteLog(string message);
+    }
+
+    class ConsolLoger : ILoger
+    {
+        public void WriteLog(string message)
+        {
+            string strtemp = string.Format("{0}", message);
+            MessageBox.Show(strtemp);
+        }
+    }
+
+    class FileLogger : ILoger
+    {
+        private StreamWriter writer;
+        public FileLogger(string path)
+        {
+            writer = File.CreateText(path);
+            writer.AutoFlush = true;
+        }
+
+        public void WriteLog(string messsge)
+        {
+            string strtemp = string.Format("{0} {1}", DateTime.Now.ToShortTimeString(), messsge);
+            MessageBox.Show(strtemp);
+        }
+    }
+
+    class climateMonitor
+    {
+        private ILoger logger;
+
+        public climateMonitor(ILoger logger)
+        {
+            this.logger = logger;
+        }
+        public void start()
+        {
+            for (int i = 0; i < 2; i++)
+            {
+                string strtemp = string.Format("{0}", i.ToString());
+                logger.WriteLog("temperture" + strtemp);
+            }
+        }
+    }
+
+
+    class MyStack<T>
+    {
+        T[] _elements;
+        int pos = 0;
+
+        public MyStack()
+        {
+            _elements = new T[100];
+        }
+
+        public void Push(T element)
+        {
+            _elements[++pos] = element; 
+        }
+        public T Pop()
+        {
+            return _elements[pos--];
+        }
+
+    }
+
+    class MyBase
+    {
+    }
+    class MyClass1 : MyBase
+    {
+    }
+
+
+
+
+    public abstract class PureBase
+    {
+        public abstract int GetFirst();
+        public abstract int GetNext();
+    }
+    public class DrivedA : PureBase
+    {
+        private int no = 1;
+
+        public override int GetFirst()
+        {
+            return no;
+        }
+        public override int GetNext()
+        {
+            return no++;
+        }
+    }
+
+    public static class MyUtility
+    {
+        private static int ver; 
+
+        static MyUtility()
+        {
+            ver = 1; 
+        }
+
+        public static string Convert(int i)
+        {
+            return i.ToString();
+        }
+        public static int ConvertBack(string s)
+        {
+            return int.Parse(s);
+        }
+    }
+
+    public class MyClass
+    {
+        private int val = 1; 
+        public int InstRun()
+        {
+            return val; 
+        }
+        public static int Run()
+        {
+            return 1; 
+        }
+    }
+
+    public class MyIndexer
+    {
+        private int[] array; 
+        public MyIndexer()
+        {
+            array = new int[5]; 
+        }
+
+        public int this[int index]
+        {
+            get
+            {
+                return array[index];
+            }
+            set
+            {
+                if(index >= array.Length)
+                {
+                    Array.Resize<int>(ref array, index + 1);
+
+                    string strtemp = string.Format("resize {0}", array.Length);
+                    MessageBox.Show(strtemp);
+
+                    array[index] = value; 
+                }
+            }
+        }
+        public int Length
+        {
+            get
+            {
+                return array.Length;
+            }
         }
     }
 
@@ -214,4 +503,8 @@ namespace study
             return abs_sum;
         }
     }
+
+
 }
+
+
