@@ -16,10 +16,94 @@ using System.IO;
 
 namespace study
 {
-
+    delegate int Compare<T>(T a, T b);
+    delegate void ThereIsAFire(string location);
 
     public partial class Form1 : Form
     {
+        
+        void Call119(string location)
+        {
+            string strtemp = "119";
+        }
+
+        void ShotOut(string location)
+        {
+            string strtemp = "shot";
+        }
+        
+        void Escape(string location)
+        {
+            string strtemp = "escape";
+        }
+
+
+        static int AscendCompare<T>(T a, T b) where T : IComparable<T>
+        {
+            return a.CompareTo(b);
+            /*
+            if (a > b)
+                return 1;
+            else if (a == b)
+                return 0;
+            else
+                return -1; */
+        }
+        static int DescendCompare<T>(T a, T b) where T: IComparable<T>
+        {
+            return a.CompareTo(b) * -1;
+            /*
+            if (a < b)
+                return 1;
+            else if (a == b)
+                return 0;
+            else
+                return -1; 
+            */
+        }
+
+        static void BubbleSort<T>(T[] DataSet, Compare<T> compare)
+        {
+            int i = 0;
+            int j = 0;
+            T ntemp11;
+
+            for (i = 0; i < DataSet.Length - 1; i++)
+            {
+                for (j = i + 1; j < DataSet.Length; j++)
+                {
+                    if(compare(DataSet[i], DataSet[j]) > 0)
+                    {
+                        ntemp11 = DataSet[j];
+                        DataSet[j] = DataSet[i];
+                        DataSet[i] = ntemp11;
+                    }
+                }
+            }
+        }
+
+
+        private void button6_Click(object sender, EventArgs e)
+        {
+
+            //delegate 1
+            int[] a = { 3, 7, 4, 2, 10 };
+
+            BubbleSort<int>(a, new Compare<int>(AscendCompare));
+
+            double[] b = { 8, 4, 1, 0, 2 };
+
+            BubbleSort<double>(b, new Compare<double>(DescendCompare));
+
+            //delegate 2
+            ThereIsAFire fire = new ThereIsAFire(Call119);
+            fire += new ThereIsAFire(ShotOut);
+            fire += new ThereIsAFire(Escape);
+
+            fire("my");
+
+
+        }
 
         double d_sum = 0;
         DateTime _time;
@@ -295,8 +379,82 @@ namespace study
 
             monitor.start();
         }
+
+
+
+
+        private void button5_Click(object sender, EventArgs e)
+        {
+            int[] a = { 5, 53, 3, 7, 1 };
+            MySort.CompareDelegate compDelegate = AscendingCompare;
+            MySort.Sort(a, compDelegate);
+
+
+            compDelegate = DescendingCompare;
+            MySort.Sort(a, compDelegate);
+
+        }
+
+        int AscendingCompare(int i1, int i2)
+        {
+            if (i1 == i2) return 0;
+            return (i2 - i1) > 0 ? 1 : -1;
+        }
+
+        int DescendingCompare(int i1, int i2)
+        {
+            if (i1 == i2) return 0;
+            return (i1 - i2) > 0 ? 1 : -1;
+        }
+
+
+
+
+
+
+
+        
+
+
+
+
     }
 
+
+    class MySort
+    {
+        public delegate int CompareDelegate(int i1, int i2);
+
+        public static void Sort(int[] arr, CompareDelegate comp)
+        {
+            if (arr.Length < 2) return;
+
+            int nRet;
+            for(int i = 0; i < arr.Length- 1; i++)
+            {
+                for (int j = i + 1; j < arr.Length; j++)
+                {
+                    nRet = comp(arr[i], arr[j]);
+
+                    if (nRet == -1)
+                    {
+                        int ntemp = arr[j];
+                        arr[j] = arr[i];
+                        arr[i] = ntemp;
+                    }
+                }
+                Display(arr);
+            }
+        }
+        static void Display(int[] arr)
+        {
+            foreach(var i in arr)
+            {
+                string strtemp = string.Format("{0}", i);
+                MessageBox.Show(strtemp);
+            }
+        }
+    }
 
     interface ILoger
     {
