@@ -9,19 +9,66 @@ using System.Threading.Tasks;
 using System.Windows.Forms;
 using System.Collections;
 using System.IO;
+using MyExtension;
 
 
 
+namespace MyExtension
+{
+    public static class IntergerExtension
+    {
+        public static int squre(this int myInt)
+        {
+            return myInt * myInt;
+        }
 
+        public static int Power(this int myInt, int exponet)
+        {
+            int result = myInt;
+
+            for (int i = 1; i < exponet; i++)
+                result = result * myInt;
+
+            return result;
+        }
+    }
+}
 
 namespace study
 {
     delegate int Compare<T>(T a, T b);
     delegate void ThereIsAFire(string location);
+    delegate int Calulate(int i, int j);
+    delegate int Calulate2(int a, int b);
+    delegate string Concatenate(string[] args);
 
     public partial class Form1 : Form
     {
-        
+
+        private void button7_Click(object sender, EventArgs e)
+        {
+            // Calulate2 calc2 = (a, b) => a + b;
+
+            Concatenate concat = (arr) =>
+            {
+                string strtemp = "";
+                foreach (string s in arr)
+                    strtemp += s;
+                return strtemp;
+            };
+
+            Func<int> func1 = () => 10;
+            Func<int, int> func2 = (x) => x * 2;
+            Func<double, double, double> func3 = (x, y) => x / y;
+
+            // 확장 메소드 
+            int ss = 3.squre();
+
+        }
+
+
+
+
         void Call119(string location)
         {
             string strtemp = "119";
@@ -95,8 +142,15 @@ namespace study
 
             BubbleSort<double>(b, new Compare<double>(DescendCompare));
 
-            //delegate 2
-            ThereIsAFire fire = new ThereIsAFire(Call119);
+            //람다식
+            Calulate calc = (i, j) => i + j;
+            Calulate calc2 = delegate (int i, int j)
+            {
+                return i + j;
+            };
+
+             //delegate 2
+             ThereIsAFire fire = new ThereIsAFire(Call119);
             fire += new ThereIsAFire(ShotOut);
             fire += new ThereIsAFire(Escape);
 
@@ -406,16 +460,6 @@ namespace study
             if (i1 == i2) return 0;
             return (i1 - i2) > 0 ? 1 : -1;
         }
-
-
-
-
-
-
-
-        
-
-
 
 
     }
