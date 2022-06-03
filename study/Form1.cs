@@ -13,26 +13,7 @@ using MyExtension;
 
 
 
-namespace MyExtension
-{
-    public static class IntergerExtension
-    {
-        public static int squre(this int myInt)
-        {
-            return myInt * myInt;
-        }
 
-        public static int Power(this int myInt, int exponet)
-        {
-            int result = myInt;
-
-            for (int i = 1; i < exponet; i++)
-                result = result * myInt;
-
-            return result;
-        }
-    }
-}
 
 namespace study
 {
@@ -462,6 +443,158 @@ namespace study
         }
 
 
+        async static private void MyMethodAsync(int count)
+        {
+            string strtemp = string.Format("c");
+
+            MessageBox.Show(strtemp);
+
+            strtemp = string.Format("d");
+            MessageBox.Show(strtemp);
+
+            await Task.Run(async () =>
+            {
+                for (int i = 0; i < count; i++)
+                {
+                    strtemp = string.Format("{0}", (double)i/(double)count);
+                    MessageBox.Show(strtemp);
+                    await Task.Delay(100);
+                }
+            }
+            );
+        }
+
+
+        static void Caller()
+        {
+            string strtemp = string.Format("a");
+            MessageBox.Show(strtemp);
+
+            strtemp = string.Format("b");
+            MessageBox.Show(strtemp);
+
+            MyMethodAsync(3);
+
+            strtemp = string.Format("e");
+            MessageBox.Show(strtemp);
+
+            strtemp = string.Format("f");
+            MessageBox.Show(strtemp);
+
+        }
+
+
+
+
+        private void button8_Click(object sender, EventArgs e)
+        {
+            Caller();
+        }
+
+        static async Task<long> CopyAsync(string str1st, string str2nd)
+        {
+
+            using (var fromStream = new FileStream(str1st, FileMode.Open))
+            {
+                long totalcopy = 0;
+                using (var ToStream = new FileStream(str2nd, FileMode.Open))
+                {
+                    byte[] buffer = new byte[1024];
+                    int nRead = 0;
+                    while ((nRead = await fromStream.ReadAsync(buffer, 0, buffer.Length)) != 0)
+                    {
+                        await ToStream.WriteAsync(buffer, 0, nRead);
+                        totalcopy += nRead;
+                    }
+                }
+
+                return totalcopy;
+            }
+
+           
+        }
+
+
+        static async void DoCopy(string str1st, string str2nd)
+        {
+            long totalcopy = await CopyAsync(str1st, str2nd);
+
+            string strtemp = string.Format("{0}", totalcopy);
+        }
+
+
+
+        private void button9_Click(object sender, EventArgs e)
+        {
+            // async 비동기화 방식 이걸 사용하는 그림을 알고있어야함 
+            string strfirst = string.Format("");
+            string strsecond = string.Format("");
+
+            DoCopy(strfirst, strsecond);
+        }
+
+        
+
+        private void button10_Click(object sender, EventArgs e)
+        {
+
+            // 패턴 매칭 
+            object[] data = { 1, null, 10, 20.1 };
+
+            foreach (var item in data)
+            {
+                if (item is null)
+                {
+                    int x = 0; 
+                }
+                else if (item is 10)
+                {
+                    int x = 0;
+                }
+                else if (item is 20.1)
+                {
+                    int x = 0;
+                }
+            }
+
+            //null able 
+            int? a = null;
+
+            if (a == null)
+            {
+                int x = a ?? 1;
+            }
+            else
+            {
+
+            }
+
+            Rectangle r = new Rectangle();
+            r.Height = 10;
+            r.Width = 20;
+
+            string strtemp = $"{{r.Height}} * {{r.Width}} = {(r.Height * r.Width)}";
+            MessageBox.Show(strtemp);
+
+
+            //dictionary 사용
+            Hashtable ht = new Hashtable()
+            {
+                ["one"] = 1,
+                ["Two"] = 2,
+                ["Three"] = 3
+            };
+
+            Hashtable ht2 = new Hashtable()
+            {
+                {"one", 1 },
+                {"two", 2 },
+                {"three", 3 }
+             };
+
+
+
+        }
     }
 
 
@@ -710,5 +843,24 @@ namespace study
 
 
 }
+namespace MyExtension
+{
+    public static class IntergerExtension
+    {
+        public static int squre(this int myInt)
+        {
+            return myInt * myInt;
+        }
 
+        public static int Power(this int myInt, int exponet)
+        {
+            int result = myInt;
+
+            for (int i = 1; i < exponet; i++)
+                result = result * myInt;
+
+            return result;
+        }
+    }
+}
 
