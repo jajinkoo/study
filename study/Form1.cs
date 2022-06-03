@@ -595,6 +595,69 @@ namespace study
 
 
         }
+
+
+        (int count, int sum, double average) calculate1(List<int> data)
+        {
+            int cnt = 0, sum = 0;
+            double avg = 0; 
+
+            foreach(var i in data)
+            {
+                cnt++;
+                sum += i;
+            }
+
+            avg = sum / cnt;
+            return (cnt, sum, avg);
+        }
+
+        static string ToLowerString(string input)
+        {
+            var arr = input.ToCharArray(); // 스트링을 배열에 넣어주네 워...
+            for (int i = 0; i < arr.Length; i++)
+            {
+                arr[i] = ToLowerchar(i);
+            }
+
+            char ToLowerchar(int i)
+            {
+                if (arr[i] < 65 || arr[i] > 90)
+                    return arr[i];
+                else
+                    return (char)(arr[i] + 32);
+            }
+
+            return new string(arr);
+
+        }
+
+        void Divide1(int a, int b, out double aa, out double bb)
+        {
+            aa = a / b;
+            bb = a % b; 
+        }
+
+        private void button11_Click(object sender, EventArgs e)
+        {
+            //tuble
+            var list = new List<int> { 1, 2, 3, 4, 5 };
+
+            var r = calculate1(list);
+            (int cnt, int sum, double avg) = calculate1(list);
+
+            //local function 
+
+            string str1 = ToLowerString("Hello");
+
+            //out
+            double i, j;
+            Divide1(10, 5, out i, out j);
+
+            //긴 숫자 
+            int 백만 = 1_000_000;
+
+        }
     }
 
 
