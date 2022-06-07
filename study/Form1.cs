@@ -657,6 +657,55 @@ namespace study
             //긴 숫자 
             int 백만 = 1_000_000;
 
+
+
+        }
+
+        static GameData _gameData = new GameData(); 
+
+        private void button12_Click(object sender, EventArgs e)
+        {
+            ref int score10 = ref _gameData.GetScore(10);
+
+            score10 = 99;
+
+            string line;
+
+            using (StreamReader rdr = new StreamReader("data.txt"))
+            {
+                while((line = rdr.ReadLine()) != null)
+                {
+                    string stremp = line; 
+                }
+            }
+
+            using (StreamReader rdr = new StreamReader("data.txt"))
+            {
+                int ch = rdr.Read();
+
+                char[] buffer = new char[10];
+                int nreadcount = rdr.Read(buffer, 0, 10); 
+            }
+
+            using (StreamWriter wr = new StreamWriter("temp.txt"))
+            {
+                wr.WriteLine("123");
+                wr.WriteLine("456");
+
+                char [] array = new char[4]  { 'a','b','c','d'};
+                wr.WriteLine(array);
+            }
+
+
+        }
+    }
+
+    class GameData
+    {
+        private int[] score = new int[100];
+        public ref int GetScore(int id)
+        {
+            return ref score[id];
         }
     }
 
