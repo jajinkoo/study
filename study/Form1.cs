@@ -652,6 +652,7 @@ namespace study
 
             //out
             double i, j;
+ 
             Divide1(10, 5, out i, out j);
 
             //긴 숫자 
@@ -698,7 +699,22 @@ namespace study
 
 
         }
+
+        private void button13_Click(object sender, EventArgs e)
+        {
+            Stream outStream = new FileStream("a.txt", FileMode.Create);
+
+            outStream.Close();
+
+           // using var outStream1 = new FileStream("a1.txt", FileMode.Create) ;
+
+            using (var outstream2 = new FileStream("b1.txt", FileMode.Create)) ;
+
+            using var reader = new StreamReader("c1.txt");
+
+        }
     }
+
 
     class GameData
     {
