@@ -202,6 +202,108 @@ namespace thisiscsharp
                 }
             }
         }
+
+        private static void Print(int nValue)
+        {
+            Console.WriteLine(nValue.ToString());
+        }
+
+        private void button12_Click(object sender, EventArgs e)
+        {
+            int[] score = new int[] { 22, 55, 88, 555, 2, 3, 66, 1, 5 };
+
+            foreach (int nData in score)
+            {
+               // string strtemp = string.Format("{ 0}", nData);
+            }
+
+            Array.Sort(score);
+
+            // 배열내부의 인자를 동일 행동을 하게 한다. 
+            Array.ForEach<int>(score, new Action<int>(Print));
+
+            // 배열의 차원을 표시한다. 
+            Console.WriteLine(score.Rank);
+
+            Console.WriteLine(Array.BinarySearch<int>(score,88));
+
+            Console.WriteLine(Array.IndexOf(score, 88));
+
+            //배열 초기화 
+            Array.Clear(score, 0, score.Length);
+
+            Array.Clear(score, 0, score.Length);
+
+
+
+
+        }
+
+        static void PrintArray(System.Array array)
+        {
+            foreach (var e in array)
+                Console.Write(e);
+            Console.WriteLine();
+        }
+        private void button13_Click(object sender, EventArgs e)
+        {
+            char[] array = new char['Z' - 'A' + 1];
+
+            for (int i = 0; i < array.Length; i++)
+            {
+                array[i] = (char)('A' + i);
+            }
+
+           // PrintArray(array[..]); 이러면 전체 데이터 
+           //PrintArray(array[1..]); 이러면 1부터 끝까지 
+
+        }
+
+        private void button14_Click(object sender, EventArgs e)
+        {
+            int[,] array = new int[2,3];
+
+            int[,,] array1 = new int[2, 3, 1];
+
+        }
+
+        private void button15_Click(object sender, EventArgs e)
+        {
+            int[][] array = new int[3][];
+            array[0] = new int[5] { 1, 2, 3, 4, 5 };
+            array[1] = new int[] { 11, 22, 33 };
+            array[2] = new int[] { 111, 222 };
+
+            foreach (int[] arr in array)
+            {
+                foreach (int eㅌ in arr)
+                {
+                    //이차원으로 사용 방법 
+                }
+            }
+
+            int[][] array2 = new int[2][]
+            {
+                new int[] { 1,2},
+                new int[4] {1,2,3,4}
+            };
+
+            foreach (int[]arr in array2)
+            {
+                foreach (int ee in arr)
+                {
+                    //2차원 가변 배열 사용법 
+                }
+            }
+
+            
+
+        }
+
+        private void button16_Click(object sender, EventArgs e)
+        {
+
+        }
     }
 
     class Class
