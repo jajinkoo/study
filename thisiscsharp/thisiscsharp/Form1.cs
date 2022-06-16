@@ -7,6 +7,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Forms;
+using System.Collections;
 
 // 2020test
 namespace thisiscsharp
@@ -302,7 +303,132 @@ namespace thisiscsharp
 
         private void button16_Click(object sender, EventArgs e)
         {
+            ArrayList list = new ArrayList();
+            for (int i = 0; i < 5; i++)
+                list.Add(i);
 
+            foreach (object obj in list)
+                Console.WriteLine(obj.ToString());
+
+            list.Remove(1);
+
+            foreach(object obj in list)
+                Console.WriteLine(obj.ToString());
+
+            list.Insert(1, "test");
+
+            foreach (object obj in list)
+                Console.WriteLine(obj.ToString());
+
+        }
+
+        private void button17_Click(object sender, EventArgs e)
+        {
+            Queue qu = new Queue();
+
+            qu.Enqueue(1);
+            qu.Enqueue("11");
+
+
+            while (qu.Count > 0)
+                Console.WriteLine(qu.Dequeue());
+
+            
+
+
+        }
+
+        private void button18_Click(object sender, EventArgs e)
+        {
+            Stack stack = new Stack();
+
+            stack.Push(1);
+            stack.Push("222");
+
+            while (stack.Count > 0)
+                Console.WriteLine(stack.Pop());
+        }
+
+        private void button19_Click(object sender, EventArgs e)
+        {
+            Hashtable ht = new Hashtable();
+
+            ht["1"] = "2";
+            ht[2] = "3";
+
+
+            Console.WriteLine(ht[2]);
+        }
+
+        private void button20_Click(object sender, EventArgs e)
+        {
+            ArrayList ar = new ArrayList() { 1, 2, 3, 4 };
+
+            Queue que = new Queue();
+
+            foreach (object obj in ar)
+                que.Enqueue(obj);
+
+            Stack stack = new Stack();
+
+            foreach (object obj in stack)
+                stack.Push(obj);
+
+            Hashtable ht = new Hashtable()
+            {
+                ["1"] = 1,
+                ["2"] = 2
+            };
+        }
+
+
+
+
+        private void button21_Click(object sender, EventArgs e)
+        {
+
+            MyList list = new MyList();
+
+            for (int i = 0; i < 5; i++)
+                list[i] = i;
+
+            for (int i = 0; i < 5; i++)
+                Console.WriteLine(list[i].ToString());
+        }
+    }
+
+    class MyList
+    {
+        private int[] array;
+        public MyList()
+        {
+            array = new int[3];
+        }
+
+        public int this[int index]
+        {
+            get 
+            {
+                return array[index];
+            }
+
+            set 
+            {
+                if (index >= array.Length)
+                {
+                    Array.Resize<int>(ref array, index + 1);
+                }
+
+                array[index] = value; 
+            }
+        }
+
+        public int Length
+        {
+            get
+            {
+                return array.Length;
+            }
         }
     }
 
