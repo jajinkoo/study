@@ -37,7 +37,7 @@ namespace thisiscsharp
             BirthdayInfo birth = new BirthdayInfo();
             birth.Name = "space";
 
-            birth.datetime = new DateTime(1,2,3);
+            birth.datetime = new DateTime(1, 2, 3);
 
             string strname = birth.Name;
             DateTime dt = birth.datetime;
@@ -110,7 +110,7 @@ namespace thisiscsharp
                          orderby n
                          select n;
 
-            foreach(int n in result)
+            foreach (int n in result)
             {
                 int t = n;
             }
@@ -215,7 +215,7 @@ namespace thisiscsharp
 
             foreach (int nData in score)
             {
-               // string strtemp = string.Format("{ 0}", nData);
+                // string strtemp = string.Format("{ 0}", nData);
             }
 
             Array.Sort(score);
@@ -226,7 +226,7 @@ namespace thisiscsharp
             // 배열의 차원을 표시한다. 
             Console.WriteLine(score.Rank);
 
-            Console.WriteLine(Array.BinarySearch<int>(score,88));
+            Console.WriteLine(Array.BinarySearch<int>(score, 88));
 
             Console.WriteLine(Array.IndexOf(score, 88));
 
@@ -255,14 +255,14 @@ namespace thisiscsharp
                 array[i] = (char)('A' + i);
             }
 
-           // PrintArray(array[..]); 이러면 전체 데이터 
-           //PrintArray(array[1..]); 이러면 1부터 끝까지 
+            // PrintArray(array[..]); 이러면 전체 데이터 
+            //PrintArray(array[1..]); 이러면 1부터 끝까지 
 
         }
 
         private void button14_Click(object sender, EventArgs e)
         {
-            int[,] array = new int[2,3];
+            int[,] array = new int[2, 3];
 
             int[,,] array1 = new int[2, 3, 1];
 
@@ -289,7 +289,7 @@ namespace thisiscsharp
                 new int[4] {1,2,3,4}
             };
 
-            foreach (int[]arr in array2)
+            foreach (int[] arr in array2)
             {
                 foreach (int ee in arr)
                 {
@@ -297,7 +297,7 @@ namespace thisiscsharp
                 }
             }
 
-            
+
 
         }
 
@@ -312,7 +312,7 @@ namespace thisiscsharp
 
             list.Remove(1);
 
-            foreach(object obj in list)
+            foreach (object obj in list)
                 Console.WriteLine(obj.ToString());
 
             list.Insert(1, "test");
@@ -333,7 +333,7 @@ namespace thisiscsharp
             while (qu.Count > 0)
                 Console.WriteLine(qu.Dequeue());
 
-            
+
 
 
         }
@@ -395,6 +395,125 @@ namespace thisiscsharp
             for (int i = 0; i < 5; i++)
                 Console.WriteLine(list[i].ToString());
         }
+
+        static void CopyArray<T>(T[] source, T[] target)
+        {
+            for (int i = 0; i < source.Length; i++)
+                target[i] = source[i];
+        }
+
+        private void button22_Click(object sender, EventArgs e)
+        {
+            int[] source = { 1, 2, 3, 4, 5 };
+            int[] target = new int[source.Length];
+
+            CopyArray<int>(source, target);
+
+
+            object[] source1 = { 1, 2, 3, "1" };
+            object[] target1 = new object[source1.Length];
+
+            CopyArray<object>(source1, target1);
+        }
+
+        private void button23_Click(object sender, EventArgs e)
+        {
+            MyList1<string> str_list = new MyList1<string>();
+
+            str_list[0] = "11";
+            str_list[5] = "55";
+
+            MyList1<int> int_list = new MyList1<int>();
+
+            int_list[0] = 1;
+            int_list[4] = 5;
+        }
+
+
+        public static T CreateInstance<T>() where T : new()
+        {
+            return new T();
+        }
+
+        private void button24_Click(object sender, EventArgs e)
+        {
+            StructArray<int> a = new StructArray<int>(3);
+
+            a.Array[0] = 1;
+            a.Array[1] = 2;
+
+
+            // 배열을 인자로 가지고 있는 방식 
+            RefArray<StructArray<double>> b = new RefArray<StructArray<double>>(3);
+
+            b.Array[0] = new StructArray<double>(4);
+            b.Array[1] = new StructArray<double>(3);
+
+
+        }
+    }
+
+
+    class StructArray<T> where T : struct
+    {
+        public T[] Array { get; set; }
+        public StructArray(int size)
+        {
+            Array = new T[size];
+        }
+    }
+
+    class RefArray<T> where T : class
+    {
+        public T[] Array { get; set; }
+        public RefArray(int size)
+        {
+            Array = new T[size];
+        }
+    }
+
+    class Base {}
+    class Derived : Base { }
+    class BaseArray<U> where U : Base 
+    {
+        public U[] Array { get; set; }
+        public BaseArray(int size)
+        {
+            Array = new U[size];
+        }
+
+        public void CopyArray<T>(T[] Source) where T : U
+        {
+            Source.CopyTo(Array, 0);
+        }
+    }
+
+
+    class MyList1<T>
+    {
+        private T[] array;
+
+        public MyList1()
+        {
+            array = new T[3];
+        }
+
+        public T this[int index]
+        {
+            get { return array[index]; }
+            set 
+            {
+                if (index >= array.Length)
+                    Array.Resize<T>(ref array, index + 1);
+
+                array[index] = value;
+            }
+        }
+        public int Length
+        {
+            get { return array.Length; }
+        }
+
     }
 
     class MyList
