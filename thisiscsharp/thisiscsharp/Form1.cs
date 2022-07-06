@@ -451,8 +451,139 @@ namespace thisiscsharp
 
 
         }
+
+        private void button25_Click(object sender, EventArgs e)
+        {
+            int[] arr = { 1, 2, 3 };
+
+            try
+            {
+                for (int i = 0; i < 5; i++)
+                {
+                    Console.WriteLine(arr[i]);
+                }
+            }
+            catch (Exception aa)
+            {
+                Console.WriteLine(aa.Message);
+            }
+
+        }
+
+        static void DoSomething(int arg)
+        {
+            if (arg < 10)
+                Console.WriteLine($"arg: {arg}");
+            else
+                throw new Exception("over arg");
+        }
+
+        private void button26_Click(object sender, EventArgs e)
+        {
+            try
+            {
+                DoSomething(1);
+                DoSomething(11);
+                DoSomething(13);
+                DoSomething(14);
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine(ex.Message);
+            }
+
+            // 식으로 표현되는 방식 
+            try
+            {
+                int? a = null;
+                int b = a ?? throw new ArgumentNullException();
+            }
+            catch (ArgumentNullException ex)
+            {
+                Console.WriteLine(ex.Message);
+            }
+
+            try
+            {
+                int[] array = new[] { 1, 2, 3 };
+
+                int index = 4;
+                int value = array[index >= 0 && index < 3 ? index : throw new IndexOutOfRangeException()];
+
+            }
+            catch (IndexOutOfRangeException ex)
+            {
+                Console.WriteLine(ex.Message);
+            }
+
+
+        }
+
+        static uint MergeARGB(uint alpha, uint red, uint gree, uint blue)
+        {
+
+            uint[] args = new uint[] { alpha, red, gree, blue };
+
+            foreach (uint arg in args)
+            {
+                if (arg > 255)
+                {
+                    throw new InvalidArgumentException()
+                    {
+                        Argument = arg,
+                        Range = "0  ~ 255"
+                    };
+                }
+            }
+
+            return (alpha << 24 & 0xFF000000)|
+                (red << 16 & 0x00FF0000)|
+                 (gree << 8 & 0x0000FF00)|
+                 (blue & 0x000000ff);
+        }
+
+        private void button27_Click(object sender, EventArgs e)
+        {
+            try
+            {
+                Console.WriteLine("0x{0:x}", MergeARGB(255, 111, 111, 111));
+            }
+            catch (InvalidArgumentException ex)
+            {
+                Console.WriteLine(ex.Message);
+            }
+            finally
+            {
+                Console.WriteLine("Endof");
+            }
+           
+        }
     }
 
+    class InvalidArgumentException : Exception
+    {
+        public InvalidArgumentException()
+        {
+            
+        }
+        public InvalidArgumentException(string message) : base(message)
+        {
+
+        }
+
+        public object Argument
+        {
+            get;
+            set;
+        }
+
+        public string Range
+        {
+            get;
+            set;
+        }
+
+    }
 
     class StructArray<T> where T : struct
     {
