@@ -8,6 +8,7 @@ using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Forms;
 using System.Collections;
+using System.Threading;
 
 // 2020test
 namespace thisiscsharp
@@ -557,6 +558,147 @@ namespace thisiscsharp
                 Console.WriteLine("Endof");
             }
            
+        }
+
+        private void button28_Click(object sender, EventArgs e)
+        {
+            SideTask task = new SideTask(100);
+            Thread t1 = new Thread(new ThreadStart(task.KeepAlive));
+            t1.IsBackground = false;
+
+            Console.WriteLine("starting thread...");
+            t1.Start();
+
+            Thread.Sleep(100);
+
+            Console.WriteLine("Aborting thread..");
+            t1.Abort();
+
+            Console.WriteLine("Waiting until thread stops..");
+            t1.Join();
+
+            Console.WriteLine();
+        }
+
+        private void button29_Click(object sender, EventArgs e)
+        {
+            Counter counter = new Counter();
+
+
+            Thread incThread = new Thread(new ThreadStart(counter.Increase));
+            Thread decThread = new Thread(new ThreadStart(counter.Decrease));
+
+            incThread.Start();
+            decThread.Start();
+
+            incThread.Join();
+            decThread.Join();
+
+            Console.WriteLine(counter.Count);
+
+        }
+    }
+
+
+    class Counter
+    {
+        const int LOOP_COUNT = 1000;
+
+        readonly object thisLock;
+
+        private int count; 
+        public int Count
+        {
+            get { return count; }
+        }
+
+        public Counter()
+        {
+            thisLock = new object();
+            count = 0; 
+        }
+
+        public void Increase()
+        {
+            int nLoopCount = LOOP_COUNT;
+
+            while (nLoopCount-- > 0)
+            {
+                /*
+                lock (thisLock)
+                {
+                    count++;
+                }
+                */
+                Monitor.Enter(thisLock);
+                try
+                {
+                    count++;
+                    Console.WriteLine(count);
+                }
+                finally
+                {
+                    Monitor.Exit(thisLock);
+                }
+                Thread.Sleep(1);
+            }
+        }
+
+        public void Decrease()
+        {
+            int nLoopCount = LOOP_COUNT;
+            while (nLoopCount-- > 0)
+            {
+                /*
+                lock (thisLock)
+                {
+                    count--; 
+                }
+                */
+                Monitor.Enter(thisLock);
+                try 
+                {
+                    count--;
+                    Console.WriteLine(count);
+                }
+                finally
+                {
+                    Monitor.Exit(thisLock);
+                }
+                Thread.Sleep(1);
+            }
+        }
+    }
+    class SideTask
+    {
+        int count;
+
+        public SideTask(int count1)
+        {
+            this.count = count1;
+        }
+
+        public void KeepAlive()
+        {
+            try
+            {
+                while (count > 0)
+                {
+                    Console.WriteLine($"{count--} Left");
+                    Thread.Sleep(10);
+                }
+                Console.WriteLine("Count : 0");
+            }
+            catch (ThreadAbortException e)
+            {
+                Console.WriteLine(e);
+                Thread.ResetAbort();
+            }
+            finally 
+            {
+                Console.WriteLine("Clearing resource..");
+            }
+
         }
     }
 
